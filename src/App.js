@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import LoginPage from "./components/LoginPage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import ListViewPage from "./components/ListViewPage";
+import DetailViewPage from "./components/DetailViewPage";
+
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Manage authentication state
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
+        <Route
+          path="/list"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <ListViewPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/detail/:id"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <DetailViewPage />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </Router>
   );
 }
 
